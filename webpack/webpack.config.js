@@ -1,13 +1,19 @@
 const path = require('path');
 
+// https://webpack.js.org/plugins/html-webpack-plugin/ 참고
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     mode: "development",
-    entry: "./src/index.js",
+    entry: {
+        index: "./src/index.js",
+        about: "./src/about.js"
+    },
     output: {
         // __dirname : webpack.config.js 위치의 경로를 알려주는 약속된 변수 node.js의
         // "public" (이하 사용자 폴더) 경로에 최종적인 결과물을 갖다놓는다.
         path: path.resolve(__dirname, "public/index_bundle.js"),
-        filename: "main.js"
+        filename: "[name]_bundle.js"
     },
     module: {
         rules: [
@@ -29,5 +35,20 @@ module.exports = {
                 ]
             }
         ]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            filename: './index.html',
+
+            // entry의 이름과 같은거 (변수)
+            chunks: ['index']
+        }),
+
+        new HtmlWebpackPlugin({
+            template: './src/about.html',
+            filename: './about.html',
+            chunks: ['about']
+        })
+    ],
 }
